@@ -1,0 +1,252 @@
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  padding: 0 !important;
+}
+
+
+
+html, body {
+  height: 100%;
+  font-family: "Arial", sans-serif;
+  padding: 2rem;
+}
+
+body {
+  line-height: 1.6;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Container */
+.container {
+  width: 80%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Header */
+header {
+  background: #333;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Navigation */
+nav {
+  background: #444;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+nav a:hover {
+  background: #555;
+}
+
+/* Main Content */
+main {
+  padding: 20px;
+  background: #fff;
+  margin-top: 10px;
+}
+
+/* Footer */
+footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.mt-1 {
+  margin-top: 10px;
+}
+
+.mt-2 {
+  margin-top: 20px;
+}
+
+.mt-3 {
+  margin-top: 30px;
+}
+
+.mb-1 {
+  margin-bottom: 10px;
+}
+
+.mb-2 {
+  margin-bottom: 20px;
+}
+
+.mb-3 {
+  margin-bottom: 30px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+/* form#taskForm{
+  display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex-direction: column;
+} */
+
+
+
+/* .assignto{
+  display: flex;
+    align-items: flex-start;
+    gap: 10px;
+} */
+
+/* #assignees{
+  width: 100px;
+} */
+
+
+.button {
+  position: relative;
+  overflow: hidden;
+  height: 3rem;
+  padding: 0 2rem;
+  border-radius: 1.5rem;
+  background: #3d3a4e;
+  background-size: 400%;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover::before {
+  transform: scaleX(1);
+}
+
+.button-content {
+  position: relative;
+  z-index: 1;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  width: 100%;
+  height: inherit;
+  border-radius: inherit;
+  background: linear-gradient(
+    82.3deg,
+    rgba(150, 93, 233, 1) 10.8%,
+    rgba(99, 88, 238, 1) 94.3%
+  );
+  transition: all 0.475s;
+}
+
+#addNewTask i {
+  display: inline-block;
+  transition: transform 0.3s ease, background 0.3s ease;
+  background: linear-gradient(45deg, #ff6b6b, #f06595, #6a4c93);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#addNewTask i:hover {
+  transform: rotate(90deg);
+  background-position: 100% 0;
+}
+
+.task-table-container{
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 10px;
+}
+
+.status-pending {
+  background-color: #f8d7da; /* Light red */
+}
+
+.status-in-progress {
+  background-color: #fff3cd; /* Light yellow */
+}
+
+.status-completed {
+  background-color: #d4edda; /* Light green */
+}
+
+.status-on-hold {
+  background-color: #d1ecf1; /* Light blue */
+}
+
+.task-table-container table th:first-child,
+.task-table-container table td:first-child {
+  text-align: center;
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+.pm-button{
+    width: 40px;
+    height: 40px;
+    background: #f5a925;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.pm-button-cancel{
+  color: red;
+    border: 0;
+}
+
+.pm-button-cancel .fa-solid{
+  font-size: 20px;
+}
+
+.fa-trash{
+  font-size: 17px;
+}
+
+ul.task-assignees {
+  list-style: none;
+}
+
+ul.task-assignees li{
+  margin: 4px 0;
+}
