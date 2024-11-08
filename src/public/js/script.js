@@ -7,11 +7,13 @@ function checkToken() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.message === 'Token is valid') {
+        console.log("data", data)
+        if (data.message === "Token is valid") {
             console.log('Token is valid:', data.user);
-        } else {
+        } 
+        if (data.message != "Token is valid") {
             console.error('Invalid token:', data.message);
-            // window.location.href = '/login.html'; // Redirect to login.html if token is invalid
+            window.location.href = '/login.html'; // Redirect to login.html if token is invalid
         }
     })
     .catch(error => {
