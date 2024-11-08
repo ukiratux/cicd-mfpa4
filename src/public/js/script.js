@@ -1,28 +1,6 @@
-function checkToken() {
-    fetch(`auth/check-token`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming token is stored in localStorage
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("data", data)
-        if (data.message === "Token is valid") {
-            console.log('Token is valid:', data.user);
-        } 
-        if (data.message != "Token is valid") {
-            console.error('Invalid token:', data.message);
-            window.location.href = '/login.html'; // Redirect to login.html if token is invalid
-        }
-    })
-    .catch(error => {
-        console.error('Error checking token:', error);
-        // window.location.href = '/login.html'; // Redirect to login.html on error
-    });
-}
-
-checkToken(); // Call the function to check the token
+if (!localStorage.getItem('token')) {
+      window.location.href = './login.html';
+  }
 
 
 document.addEventListener('DOMContentLoaded', function() {
