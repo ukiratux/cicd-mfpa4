@@ -50,59 +50,65 @@
   
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
 
-            fetch('./auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.token);
-                    localStorage.setItem('token', data.token);
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 1500,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                if (data.token) {
-                    
-                    Toast.fire({
-                        icon: "success",
-                        title: "Signed in successfully"
-                    }).then(() => {
-                        window.location.href = "http://localhost:3000/";
-                    });
-                } else {
-                    Toast.fire({
-                        icon: "error",
-                        title: "Username or password is incorrect"
-                    });
+        fetch('./auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // Only attempt to parse JSON if there's a response body
+            return response.text().then(text => text ? JSON.parse(text) : {});
+        })
+        .then(data => {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
                 }
-            })
-            .catch(error => {
-                console.error('Error during login:', error);
+            });
+
+            if (data.token) {
+                console.log(data.token);
+                localStorage.setItem('token', data.token);
+                Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
+                }).then(() => {
+                    window.location.href = "http://localhost:3000/";
+                });
+            } else {
                 Toast.fire({
                     icon: "error",
-                    title: "An error occurred"
+                    title: "Username or password is incorrect"
                 });
+            }
+        })
+        .catch(error => {
+            console.error('Error during login:', error);
+            Swal.fire({
+                icon: "error",
+                title: "An error occurred",
+                text: error.message
             });
         });
+    });
+</script>
 
-        
-    </script>
 </body>
 </html>
