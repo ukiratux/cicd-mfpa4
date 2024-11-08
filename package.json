@@ -31,6 +31,6 @@
     "test": "dotenv -e .env.test -- playwright test --config=configs/playwright.config.js",
     "lint": "eslint -c configs/eslint.config.mjs ./src/*",
     "test-trace": "npm test -- --reporter=html --trace on",
-    "render.com": "nvm use 20.16.0 && nodemon server.js"
+    "render": "nvm use 20.16.0 && nodemon server.js"
   }
 }
