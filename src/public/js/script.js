@@ -11,12 +11,12 @@ function checkToken() {
             console.log('Token is valid:', data.user);
         } else {
             console.error('Invalid token:', data.message);
-            window.location.href = '/login.html'; // Redirect to login.html if token is invalid
+            // window.location.href = '/login.html'; // Redirect to login.html if token is invalid
         }
     })
     .catch(error => {
         console.error('Error checking token:', error);
-        window.location.href = '/login.html'; // Redirect to login.html on error
+        // window.location.href = '/login.html'; // Redirect to login.html on error
     });
 }
 
