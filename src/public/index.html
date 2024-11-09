@@ -6,13 +6,14 @@
     <script src="../js/script.js"></script>
     <script src="../js/header.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />  </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  </head>
   <body>
   
     <h1 id="addNewTask" style="width: fit-content;">Project Management <i class="fa-solid fa-circle-plus"></i></h1>
 
     <!-- Form to add new task -->
-
 
     <h2 class="mt-3">All Tasks</h2>
 
@@ -24,8 +25,10 @@
           <th>ID</th>
           <th>Name</th>
           <th>Status</th>
+          <th>Priority</th>
           <th>Assignees</th>
           <th>Actions</th>
+          <th>Due Date</th>
         </tr>
       </thead>
       <tbody id="tasksTableBody">
@@ -40,6 +43,8 @@
         <td class="task-id"></td>
         <td class="task-name"></td>
         <td class="task-status"></td>
+        <td class="task-priority"></td>
+          <td class="task-due-date"></td>
         <td>
           <ul class="task-assignees"></ul>
         </td>
@@ -55,6 +60,40 @@
         <button class="pm-button-cancel unassignButton"><i class="fa-solid fa-circle-xmark"></i></button>
       </li>
     </template>
+
+    <!-- NEW FEATURE: ANALYTICS AND REPORTS -->
+    <h2 class="mt-3">Analytics and Reports</h2>
+    <div class="task-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Task Completion Rate</td>
+            <td id="completion-rate-value">0%</td>
+          </tr>
+          <tr>
+            <td>Total Time Spent on Tasks</td>
+            <td id="time-spent-value">0 hours</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Productivity Trends</h2>
+    <div class="task-table-container">
+      <select id="userSelect">
+        <option value="all">All Users</option>
+      </select>
+      <button onclick="loadTrends(document.getElementById('userSelect').value)">Load Analytics</button>
+      <div class="chart-container">
+        <canvas id="productivityTrendsChart"></canvas>
+      </div>
+    </div>
 
     <script src="./index.js" type="text/javascript"></script>
   </body>

@@ -1,12 +1,15 @@
 const prisma = require('./prismaClient');
 
-module.exports.createTask = function createTask(name, statusId, assignedPersonId = []) {
-  // Reference: https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations#explicit-many-to-many-relations
+module.exports.createTask = function createTask(name, statusId, assignedPersonId = [], dueDate, priority) {
+  console.log('Priority received from form:', priority); // Log to see what priority is passed
+
   return prisma.task
     .create({
       data: {
         name,
         statusId,
+        dueDate: dueDate ? new Date(dueDate) : null, // Ensure dueDate is a Date object
+        priority,
         persons: {
           create: assignedPersonId.map((personId) => ({
             person: { connect: { id: personId } },
@@ -69,6 +72,7 @@ module.exports.updateTask = function updateTask(id, data) {
     });
 };
 
+
 module.exports.deleteTask = function deleteTask(id) {
   return prisma.task
     .delete({
@@ -93,28 +97,50 @@ module.exports.deleteTaskAssignment = function deleteTaskAssignment(taskId, pers
       return assignment;
     });
 };
+// NEW FEATURE: ANALYTICS AND REPORTS
 
-
-module.exports.getCompletionRate = async function getCompletionRate() {
-  try {
-    const totalTasks = await prisma.task.count();
-    const completedTasks = await prisma.task.count({
-      where: {
-        completedAt: {
-          not: null,
-        },
-      },
+// Function to calculate task completion rates
+module.exports.getTaskCompletionRates = function getTaskCompletionRates() {
+  return prisma.task
+    .findMany()
+    .then((tasks) => {
+      const completedTasks = tasks.filter(task => task.statusId === 3).length;
+      const totalTasks = tasks.length;
+      const completionRate = (completedTasks / totalTasks) * 100;
+      return { completedTasks, totalTasks, completionRate };
     });
+};
 
-    if (totalTasks === 0) {
-      return 0; // Avoid division by zero
-    }
+// Function to calculate total time spent on tasks
+module.exports.getTotalTimeSpent = function getTotalTimeSpent() {
+  return prisma.task
+    .findMany()
+    .then((tasks) => {
+      const totalTimeSpent = tasks.reduce((total, task) => total + Number(task.timeSpent || 0), 0);
+      return { totalTimeSpent };
+    });
+};
 
-    const completionRate = (completedTasks / totalTasks) * 100;
-    console.log('Completion Rate:', completionRate);
-    return completionRate;
-  } catch (error) {
-    console.error('Error calculating completion rate:', error);
-    throw error;
-  }
+// Function to calculate productivity trends
+module.exports.getProductivityTrends = function getProductivityTrends(userId) {
+  const whereClause = userId ? { persons: { some: { personId: userId } } } : {};
+  return prisma.task
+    .findMany({
+      where: whereClause,
+      include: {
+        persons: true,
+        status: true //including the status 
+      }
+    })
+    .then((tasks) => {
+      const trends = tasks.filter(task => task.persons.some(person => person.personId === userId))
+        .map(task => ({
+          id: task.id,
+          name: task.name,
+          timeSpent: task.timeSpent || 0,
+          status: task.status.text,
+          completedAt: !!task.completedAt,
+        }));
+      return { trends };
+    });
 };

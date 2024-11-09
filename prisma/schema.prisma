@@ -17,10 +17,13 @@ model Task {
   statusId    Int
   status      Status           @relation(fields: [statusId], references: [id])
   persons     TaskAssignment[]
+  dueDate     DateTime?        // New field for due date
   completedAt DateTime?        @map("completed_at")
   timeSpent   Decimal?         @map("time_spent")
   createdAt   DateTime         @default(now()) @map("created_at")
+  priority    Int              @default(0)
 }
+
 
 model Status {
   id    Int    @id @default(autoincrement())

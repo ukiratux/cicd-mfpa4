@@ -250,3 +250,77 @@ ul.task-assignees {
 ul.task-assignees li{
   margin: 4px 0;
 }
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px; /* Set a fixed height for the chart container */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+.task-table-container {
+  margin: 40px 0;
+  overflow-x: auto;
+  background-color: #fff;
+}
+
+.task-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.task-table-container th, .task-table-container td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.task-table-container th {
+  background-color: #fff;
+  font-weight: bold;
+}
+
+.task-table-container td {
+  background-color: #fff;
+}
+
+/* Optional: Specific styling for report metrics */
+#completion-rate-value, #time-spent-value, #productivity-trends-value {
+  font-weight: bold;
+  color: #333;
+}
+
+
+
+/* Style the priority div to have a background color and center the text */
+.task-priority div {
+  display: inline-flex;           
+  justify-content: center;         
+  align-items: center;             
+  padding: 5px 10px;              
+  border-radius: 5px;             
+  width: fit-content;              
+  min-width: 80px;              
+}
+
+/* Color styles based on priority */
+.task-priority .priority-low {
+  background-color: #d4edda;        
+  color: black;                  
+}
+
+.task-priority .priority-medium {
+  background-color:#fff3cd;      
+  color: black;                   
+}
+
+.task-priority .priority-high {
+  background-color:  #f8d7da;         
+  color: black;                  
+}
+
+
+
+ 

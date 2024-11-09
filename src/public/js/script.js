@@ -1,6 +1,28 @@
-if (!localStorage.getItem('token')) {
-      window.location.href = './login.html';
-  }
+function checkToken() {
+    fetch(`auth/check-token`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming token is stored in localStorage
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("data", data)
+        if (data.message === "Token is valid") {
+            console.log('Token is valid:', data.user);
+        } 
+        if (data.message != "Token is valid") {
+            console.error('Invalid token:', data.message);
+            window.location.href = '/login.html'; // Redirect to login.html if token is invalid
+        }
+    })
+    .catch(error => {
+        console.error('Error checking token:', error);
+        // window.location.href = '/login.html'; // Redirect to login.html on error
+    });
+}
+
+checkToken(); // Call the function to check the token
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -45,8 +67,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         <form id="taskForm" class="mt-2">
                             <div>
                                 <p style="display: flex; flex-direction: column;margin-bottom: 20px;">
-                                    <label for="taskName">Task Name:</label>
+                                    <label for="taskName">Task Name</label>
                                     <input type="text" id="taskName" name="taskName" class="swal2-input" required />
+                                </p>
+                                <p style="display: flex; flex-direction: column;margin-bottom: 20px;">
+                                    <label for="taskDueDate">Due Date:</label>
+                                    <input type="date" id="taskDueDate" name="taskDueDate" class="swal2-input" required />
                                 </p>
                                 <p style="display: flex; flex-direction: column;margin-bottom: 20px;">
                                     <label for="taskStatus">Status:</label>
@@ -54,6 +80,17 @@ document.addEventListener('DOMContentLoaded', function() {
                                         ${statusOptions.map(status => `<option value="${status.id}">${status.text}</option>`).join('')}
                                     </select>
                                 </p>
+
+                        
+                                <p style="display: flex; flex-direction: column;margin-bottom: 20px;">
+                                <label for="taskPriority">Priority:</label>
+                                 <select id="taskPriority" name="taskPriority" class="swal2-select" required>
+                                  <option value="1">Low</option>
+                                   <option value="2">Medium</option>
+                                  <option value="3">High</option>
+                                 </select>
+                                 </p>
+
                                 <p class="assignto" style="display: flex; flex-direction: column;">
                                     <label for="assignees">Assign To:</label>
                                     <select id="assignees" name="assignees" class="swal2-select" multiple required>
@@ -73,19 +110,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('taskForm').addEventListener('submit', function(event) {
                             event.preventDefault();
                             const taskName = document.getElementById('taskName').value;
+                            const taskDueDate = document.getElementById('taskDueDate').value;
                             const taskStatus = document.getElementById('taskStatus').value;
                             const assignees = Array.from(document.getElementById('assignees').selectedOptions).map(option => option.value);
+                            const taskPriority = document.getElementById('taskPriority').value;
 
-                            if (!taskName || !taskStatus || assignees.length === 0) {
+                            if (!taskName || !taskDueDate || !taskStatus || assignees.length === 0 || !taskPriority) {
                                 Swal.showValidationMessage('Please fill out all fields');
                                 return;
                             }
 
                             addTask({
                                 taskName: taskName,
+                                taskDueDate: taskDueDate,
                                 taskStatus: taskStatus,
+                                priority: parseInt(taskPriority),
                                 assignees: assignees
-                            })
+                            });
                         });
                     }
                 });
