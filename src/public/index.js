@@ -118,28 +118,31 @@ function createAssigneeLi(assigneeLiTemplate, task, assignment) {
 // Function to add a new task
 function addTask() {
   const taskName = document.getElementById('taskName').value;
+  const taskDueDate = document.getElementById('taskDueDate').value;
   const taskStatus = document.getElementById('taskStatus').value;
+  const selectedAssigneeIds = Array.from(document.getElementById('assignees').selectedOptions).map(option => +option.value); // Convert to integers
+  console.log("SELECTED PEOPLE", selectedAssigneeIds)
   const taskPriority = document.getElementById('taskPriority').value;
-  const taskDueDate = document.getElementById('taskDueDate').value; // Fetch due date
-  const selectedAssigneesOptions = document.querySelectorAll(
-    '#assignees option:checked',
-  );
-  const selectedAssigneeIds = Array.from(selectedAssigneesOptions).map(
-    (option) => +option.value,
-  );
+  // const selectedAssigneeIds = Array.from(selectedAssigneesOptions).map(
+  //   (option) => +option.value,
+  // );
+
+  const requestBody = {
+    assignedPersonId: selectedAssigneeIds,
+    dueDate: taskDueDate,
+    name: taskName,
+    priority: +taskPriority,
+    statusId: +taskStatus,
+  };
+
+  console.log('Request Body:', requestBody);
 
   fetch(`${apiUrl}/tasks`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      name: taskName,
-      statusId: +taskStatus,
-      assignedPersonId: selectedAssigneeIds,
-      priority: +taskPriority,
-      dueDate: taskDueDate || null,
-    }),
+    body: JSON.stringify(requestBody),
   })
     .then((response) => response.json())
     .then(() => {

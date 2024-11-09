@@ -112,22 +112,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             const taskName = document.getElementById('taskName').value;
                             const taskDueDate = document.getElementById('taskDueDate').value;
                             const taskStatus = document.getElementById('taskStatus').value;
-                            const assignees = Array.from(document.getElementById('assignees').selectedOptions).map(option => option.value);
+                            const selectedAssigneeIds = Array.from(document.getElementById('assignees').selectedOptions).map(option => +option.value); // Convert to integers
                             const taskPriority = document.getElementById('taskPriority').value;
-
-                            if (!taskName || !taskDueDate || !taskStatus || assignees.length === 0 || !taskPriority) {
-                                Swal.showValidationMessage('Please fill out all fields');
-                                return;
+                          
+                            if (!taskName || !taskDueDate || !taskStatus || selectedAssigneeIds.length === 0 || !taskPriority) {
+                              Swal.showValidationMessage('Please fill out all fields');
+                              return;
                             }
-
-                            addTask({
-                                taskName: taskName,
-                                taskDueDate: taskDueDate,
-                                taskStatus: taskStatus,
-                                priority: parseInt(taskPriority),
-                                assignees: assignees
-                            });
-                        });
+                          
+                            addTask();
+                          });
+                          
                     }
                 });
             });

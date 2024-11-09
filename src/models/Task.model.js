@@ -1,27 +1,39 @@
 const prisma = require('./prismaClient');
 
-module.exports.createTask = function createTask(name, statusId, assignedPersonId = [], dueDate, priority) {
-  console.log('Priority received from form:', priority); // Log to see what priority is passed
+module.exports.createTask = function createTask(name, statusId,assignedPersonId,priority, dueDate) {
+  // Ensure assignedPersonId is always an array
+  const assigneesArray = Array.isArray(assignedPersonId) ? assignedPersonId : [];
+
+  // Log the task details
+  console.log('Task Details - Name:', name, 'Status ID:', statusId, 'Due Date:', dueDate, 'Priority:', priority);
+  console.log('Assignees:', assignedPersonId);
+
+  const taskData = {
+    name,
+    statusId,
+    dueDate: dueDate ? new Date(dueDate) : null, 
+    priority,
+    persons: {
+      create: assigneesArray.map((personId) => {
+        const personData = { person: { connect: { id: personId } } };
+        console.log('Person data:', personData);
+        return personData;
+      }),
+    },
+  };
+
+  console.log('Task data:', taskData);
 
   return prisma.task
     .create({
-      data: {
-        name,
-        statusId,
-        dueDate: dueDate ? new Date(dueDate) : null, // Ensure dueDate is a Date object
-        priority,
-        persons: {
-          create: assignedPersonId.map((personId) => ({
-            person: { connect: { id: personId } },
-          })),
-        },
-      },
+      data: taskData,
     })
     .then((task) => {
       console.log('Task created:', task);
       return task;
     });
 };
+
 
 module.exports.getAllTasks = function getAllTasks() {
   return prisma.task
@@ -36,7 +48,7 @@ module.exports.getAllTasks = function getAllTasks() {
       },
     })
     .then((tasks) => {
-      console.log('All tasks:', tasks);
+      // console.log('All tasks:', tasks);
       return tasks;
     });
 };
